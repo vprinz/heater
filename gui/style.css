@@ -1,0 +1,86 @@
+.heater-control {
+    height: 1300px;
+    padding-top: 30px;
+    text-align: center;
+    background-color: aliceblue;
+}
+
+.heater-control .btn {
+    width: 85%;
+    margin: 5px 0;
+}
+
+.calculated-values {
+    height: 1300px;
+    padding-top: 30px;
+    text-align: center;
+    background-color: aliceblue;
+}
+
+.heater-display {
+    height: 1300px;
+}
+
+.input {
+    padding: 7px;
+    font-size: 16px;
+    font-family: monospace;
+}
+
+.input-symbols {
+    width: 50px;
+}
+
+.heater-sensors {
+    padding-top: 30px;
+}
+
+/* Настройки стиля для ТЭН */
+
+.heater {
+    padding-top: 30px;
+}
+
+.heater-box {
+    width: 70%;
+    height: 130px;
+    border: 4px solid #000;
+    margin-bottom: 10px;
+    position: relative;
+    left: 15%;
+    bottom: 55%;
+}
+
+.heater-box::before, .heater-box::after {
+    content: '';
+    position: absolute;
+}
+
+.heater-box::after { /* Добавляем контакт справа */
+    width: 10px;
+    height: 30px;
+    background: #000;
+    right: -14px;
+    top: 46px;
+}
+
+.heater-box::before {
+    height: 100%;
+    width: 33%;
+}
+
+.turn-on {
+    background: #ED1C24;
+    transition: 4s;
+}
+
+.turn-off {
+    background: white;
+    transition: 2s;
+}
+
+
+#svg {
+    width: 100%;
+    height: 600px;
+}
