@@ -11,6 +11,13 @@ class HSensor {
     }
 }
 
+class TSensor {
+
+    get() {
+        return +document.querySelector("input[name=dt]").checked;
+    }
+}
+
 class ADC {
     /*
         Analog-to-digital converter
@@ -43,19 +50,10 @@ class DAC {
 
     constructor() {
         this.heater = new Heater();
-        this.input = null; // мб нужно будет убрать null
-        this.output = null; // мб нужно будет убрать null
     }
 
     set(digital) {
-        this.input = digital;
-        this.transform();
-        this.heater.set(this.output);
-    }
-
-    transform() {
-        // TODO сделаеть перерасчеты еще раз
-        return 0;
+        this.heater.set(digital);
     }
 }
 
@@ -93,11 +91,17 @@ class Switch {
 
 class Heater {
     constructor() {
-        this.mode = 0; // не работает (может быть другая цифра, утрочнить в коде по асм)
+        this.mode = 0;
     }
 
-    set() {
-        // включение/выключение нагревателя
+    set(volts) {
+        switch (volts) {
+            case 0xD3:
+                this.mode = 1;
+                break;
+            case 0:
+                this.mode = 0;
+        }
     }
 }
 
@@ -105,6 +109,7 @@ class UVM {
     constructor() {
         this.time = 0;
         this.count = 0;
+        this.temperature = 0;
         this.currentHumiditiesSum = 0;
         this.sensorGroups = {
             'firstGroup': [0b0000, 0b0001, 0b0010],
@@ -114,9 +119,11 @@ class UVM {
         };
         this.humidities = [];
         this.saveHumidities = [];
-        this.activeSensors = [0, 0, 0];
+        this.activeSensors = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         this.switch = new Switch();
+        this.temperatureSensor = new TSensor();
         this.adc = new ADC(this.switch);
+        this.dac = new DAC();
     }
 
     getHumidity(groupSensors) {
@@ -138,6 +145,8 @@ class UVM {
     }
 
     step() {
+        this.activeSensors = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
         let firstGroup = this.sensorGroups['firstGroup'];
         let secondGroup = this.sensorGroups['secondGroup'];
         let thirdGroup = this.sensorGroups['thirdGroup'];
@@ -154,6 +163,8 @@ class UVM {
             this.getHumidity(fourthGroup);
         }
 
+        this.temperature = this.temperatureSensor.get();
+        console.log(this.temperature);
         this.currentHumiditiesSum = [
             this.calculateHumidity(firstGroup),
             this.calculateHumidity(secondGroup),
@@ -161,11 +172,10 @@ class UVM {
             this.calculateHumidity(fourthGroup),
         ];
 
-        console.log(this.currentHumiditiesSum);
-
         for (let i = 0; i < this.currentHumiditiesSum.length; i++) {
             if (this.currentHumiditiesSum[i] >= 0x2FAE) {
-                // что-то делается
+                this.temperature = 1;
+                this.dac.set(0xD3);
             }
         }
 
@@ -178,11 +188,61 @@ class UVM {
 }
 
 
+const hex = (num) => "0x" + num.toString(16).toUpperCase();
 const uvm = new UVM();
 const step = () => {
     uvm.step();
-
+    document.getElementById("time").innerHTML = uvm.time;
+    if (uvm.temperature === 0) {
+        document.getElementById("t").setAttribute("fill", "white");
+        const heater = document.getElementById("heater");
+        heater.classList.remove('turn-on');
+        uvm.activeSensors.forEach((el, i) => {
+            if (el) {
+                document.getElementById(`dv${i + 1}`).setAttribute("fill", "palegreen");
+                document.getElementById(`sw${i}`).style.color = "green";
+                document.getElementById(`sw${i}`).innerHTML = "Активен";
+                document.getElementById(`v${i + 1}`).innerHTML = `${uvm.saveHumidities[i]} %`;
+                document.getElementById(`v${i + 1}-adc`).innerHTML = hex(uvm.humidities[i]);
+            } else {
+                document.getElementById(`dv${i + 1}`).setAttribute("fill", "white");
+                document.getElementById(`sw${i}`).style.color = "red";
+                document.getElementById(`sw${i}`).innerHTML = "Неактивен";
+                document.getElementById(`v${i + 1}`).innerHTML = "";
+                document.getElementById(`v${i + 1}-adc`).innerHTML = "";
+            }
+        });
+    } else {
+        document.getElementById("t").setAttribute("fill", "palegreen");
+        document.getElementById("dac-in").innerHTML = hex('D3');
+        document.getElementById("dac-out").innerHTML ='66';
+        const heater = document.getElementById("heater");
+        heater.classList.add('turn-on');
+        uvm.activeSensors.forEach((el, i) => {
+            document.getElementById(`dv${i + 1}`).setAttribute("fill", "white");
+            document.getElementById(`sw${i}`).style.color = "red";
+            document.getElementById(`sw${i}`).innerHTML = "Неактивен";
+            document.getElementById(`v${i + 1}`).innerHTML = "";
+            document.getElementById(`v${i + 1}-adc`).innerHTML = "";
+        });
+    }
 };
+
+document.getElementById("step").addEventListener('click', step);
+
+let interval;
+document.getElementById("start").addEventListener('click', (e) => {
+    interval = setInterval(step, 500);
+    document.getElementById("stop").disabled = false;
+    document.getElementById("start").disabled = true;
+    document.getElementById("step").disabled = true;
+});
+
+document.getElementById("stop").addEventListener('click', (e) => {
+    clearInterval(interval);
+    document.getElementById("stop").disabled = true;
+    document.getElementById("start").disabled = false;
+});
 
 document.querySelectorAll('.slider').forEach((el) => el.addEventListener('input', (e) => {
     const id = e.target.dataset.id;
