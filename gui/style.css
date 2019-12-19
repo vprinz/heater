@@ -1,5 +1,5 @@
 .heater-control {
-    height: 1300px;
+    height: 770px;
     padding-top: 30px;
     text-align: center;
     background-color: aliceblue;
@@ -11,14 +11,14 @@
 }
 
 .calculated-values {
-    height: 1300px;
+    /*height: 1300px;*/
     padding-top: 30px;
     text-align: center;
     background-color: aliceblue;
 }
 
 .heater-display {
-    height: 1300px;
+    /*height: 1300px;*/
 }
 
 .input {
@@ -74,7 +74,7 @@
     transition: 4s;
 }
 
-.turn-off {
+.turn-off:not(:hover) {
     background: white;
     transition: 2s;
 }

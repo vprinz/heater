@@ -27,14 +27,14 @@
             <div class="jumbotron jumbotron-fluid" style="margin-top: 30px;">
                 <div class="container">
                     <h1 class="display-5">ЦАП</h1>
-                    <p class="lead">Вход: <span id="dac-in"></span></p>
-                    <p class="lead">Выход: <span id="dac-out"></span> В</p>
+                    <p class="lead">Вход: <span id="dac-in">0x0</span></p>
+                    <p class="lead">Выход: <span id="dac-out">0</span> В</p>
                 </div>
             </div>
         </div>
-        <div class="heater-display col-md-7">
+        <div class="heater-display col-md-10">
             <div class="row">
-                <div class="heater col-md-5">
+                <div class="heater col-md-6">
                     <svg id="svg">
                         <!-- Первая группа датчиков -->
                         <rect id="dv1" x="10" y="10" width="50" height="50" stroke="black" fill="white"></rect>
@@ -69,7 +69,7 @@
                     </svg>
                     <div id="heater" class="heater-box"></div>
                 </div>
-                <div class="heater-sensors col-md-7">
+                <div class="heater-sensors col-md-6">
                     <div class="row">
                         <div class="col-md-6">
                             <p>
@@ -146,84 +146,92 @@
                 </div>
             </div>
         </div>
-        <div class="calculated-values col-md-3">
-            <div class="jumbotron jumbotron-fluid">
-                <div class="container">
-                    <h1 class="display-5">Датчики</h1>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <p>ДВ1: <span id="v1"></span></p>
-                            <p>ДВ3: <span id="v2"></span></p>
-                            <p>ДВ5: <span id="v3"></span></p>
-                        </div>
-                        <div class="col-md-3">
-                            <p>ДВ7: <span id="v4"></span></p>
-                            <p>ДВ9: <span id="v5"></span></p>
-                            <p>ДВ11: <span id="v6"></span></p>
-                        </div>
-                        <div class="col-md-3">
-                            <p>ДВ2: <span id="v7"></span></p>
-                            <p>ДВ4: <span id="v8"></span></p>
-                            <p>ДВ6: <span id="v9"></span></p>
-                        </div>
-                        <div class="col-md-3">
-                            <p>ДВ8: <span id="v10"></span></p>
-                            <p>ДВ10: <span id="v11"></span></p>
-                            <p>ДВ12: <span id="v12"></span></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="jumbotron jumbotron-fluid">
-                <div class="container">
-                    <h1 class="display-5">Коммутатор</h1>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <p>0b0000: <span id="sw0" style="color: red;">Неактивен</span></p>
-                            <p>0b0001: <span id="sw1" style="color: red;">Неактивен</span></p>
-                            <p>0b0010: <span id="sw2" style="color: red;">Неактивен</span></p>
-                        </div>
-                        <div class="col-md-3">
-                            <p>0b0011: <span id="sw3" style="color: red;">Неактивен</span></p>
-                            <p>0b0100: <span id="sw4" style="color: red;">Неактивен</span></p>
-                            <p>0b0101: <span id="sw5" style="color: red;">Неактивен</span></p>
-                        </div>
-                        <div class="col-md-3">
-                            <p>0b0110: <span id="sw6" style="color: red;">Неактивен</span></p>
-                            <p>0b0111: <span id="sw7" style="color: red;">Неактивен</span></p>
-                            <p>0b1000: <span id="sw8" style="color: red;">Неактивен</span></p>
-                        </div>
-                        <div class="col-md-3">
-                            <p>0b1001: <span id="sw9" style="color: red;">Неактивен</span></p>
-                            <p>0b1010: <span id="sw10" style="color: red;">Неактивен</span></p>
-                            <p>0b1011: <span id="sw11" style="color: red;">Неактивен</span></p>
+        <div class="calculated-values col-md-12">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="jumbotron jumbotron-fluid">
+                        <div class="container">
+                            <h1 class="display-5">Датчики</h1>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <p>ДВ1: <span id="v1"></span></p>
+                                    <p>ДВ3: <span id="v2"></span></p>
+                                    <p>ДВ5: <span id="v3"></span></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p>ДВ7: <span id="v4"></span></p>
+                                    <p>ДВ9: <span id="v5"></span></p>
+                                    <p>ДВ11: <span id="v6"></span></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p>ДВ2: <span id="v7"></span></p>
+                                    <p>ДВ4: <span id="v8"></span></p>
+                                    <p>ДВ6: <span id="v9"></span></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p>ДВ8: <span id="v10"></span></p>
+                                    <p>ДВ10: <span id="v11"></span></p>
+                                    <p>ДВ12: <span id="v12"></span></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="jumbotron jumbotron-fluid">
-                <div class="container">
-                    <h1 class="display-5">АЦП</h1>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <p>ДВ1: <span id="v1-adc"></span></p>
-                            <p>ДВ3: <span id="v2-adc"></span></p>
-                            <p>ДВ5: <span id="v3-adc"></span></p>
+                <div class="col-md-3">
+                    <div class="jumbotron jumbotron-fluid" style="height: 305px;">
+                        <div class="container">
+                            <h1 class="display-5">Коммутатор</h1>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <p>0b0000: <span id="sw0" style="color: red;">Inactive</span></p>
+                                    <p>0b0001: <span id="sw1" style="color: red;">Inactive</span></p>
+                                    <p>0b0010: <span id="sw2" style="color: red;">Inactive</span></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p>0b0011: <span id="sw3" style="color: red;">Inactive</span></p>
+                                    <p>0b0100: <span id="sw4" style="color: red;">Inactive</span></p>
+                                    <p>0b0101: <span id="sw5" style="color: red;">Inactive</span></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p>0b0110: <span id="sw6" style="color: red;">Inactive</span></p>
+                                    <p>0b0111: <span id="sw7" style="color: red;">Inactive</span></p>
+                                    <p>0b1000: <span id="sw8" style="color: red;">Inactive</span></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p>0b1001: <span id="sw9" style="color: red;">Inactive</span></p>
+                                    <p>0b1010: <span id="sw10" style="color: red;">Inactive</span></p>
+                                    <p>0b1011: <span id="sw11" style="color: red;">Inactive</span></p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <p>ДВ7: <span id="v4-adc"></span></p>
-                            <p>ДВ9: <span id="v5-adc"></span></p>
-                            <p>ДВ11: <span id="v6-adc"></span></p>
-                        </div>
-                        <div class="col-md-3">
-                            <p>ДВ2: <span id="v7-adc"></span></p>
-                            <p>ДВ4: <span id="v8-adc"></span></p>
-                            <p>ДВ6: <span id="v9-adc"></span></p>
-                        </div>
-                        <div class="col-md-3">
-                            <p>ДВ8: <span id="v10-adc"></span></p>
-                            <p>ДВ10: <span id="v11-adc"></span></p>
-                            <p>ДВ12: <span id="v12-adc"></span></p>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="jumbotron jumbotron-fluid">
+                        <div class="container">
+                            <h1 class="display-5">АЦП</h1>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <p>ДВ1: <span id="v1-adc"></span></p>
+                                    <p>ДВ3: <span id="v2-adc"></span></p>
+                                    <p>ДВ5: <span id="v3-adc"></span></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p>ДВ7: <span id="v4-adc"></span></p>
+                                    <p>ДВ9: <span id="v5-adc"></span></p>
+                                    <p>ДВ11: <span id="v6-adc"></span></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p>ДВ2: <span id="v7-adc"></span></p>
+                                    <p>ДВ4: <span id="v8-adc"></span></p>
+                                    <p>ДВ6: <span id="v9-adc"></span></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p>ДВ8: <span id="v10-adc"></span></p>
+                                    <p>ДВ10: <span id="v11-adc"></span></p>
+                                    <p>ДВ12: <span id="v12-adc"></span></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

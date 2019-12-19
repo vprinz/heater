@@ -195,19 +195,21 @@ const step = () => {
     document.getElementById("time").innerHTML = uvm.time;
     if (uvm.temperature === 0) {
         document.getElementById("t").setAttribute("fill", "white");
+        document.getElementById("dac-in").innerHTML = hex('0');
+        document.getElementById("dac-out").innerHTML ='0';
         const heater = document.getElementById("heater");
         heater.classList.remove('turn-on');
         uvm.activeSensors.forEach((el, i) => {
             if (el) {
                 document.getElementById(`dv${i + 1}`).setAttribute("fill", "palegreen");
                 document.getElementById(`sw${i}`).style.color = "green";
-                document.getElementById(`sw${i}`).innerHTML = "Активен";
+                document.getElementById(`sw${i}`).innerHTML = "Active";
                 document.getElementById(`v${i + 1}`).innerHTML = `${uvm.saveHumidities[i]} %`;
                 document.getElementById(`v${i + 1}-adc`).innerHTML = hex(uvm.humidities[i]);
             } else {
                 document.getElementById(`dv${i + 1}`).setAttribute("fill", "white");
                 document.getElementById(`sw${i}`).style.color = "red";
-                document.getElementById(`sw${i}`).innerHTML = "Неактивен";
+                document.getElementById(`sw${i}`).innerHTML = "Inactive";
                 document.getElementById(`v${i + 1}`).innerHTML = "";
                 document.getElementById(`v${i + 1}-adc`).innerHTML = "";
             }
@@ -221,7 +223,7 @@ const step = () => {
         uvm.activeSensors.forEach((el, i) => {
             document.getElementById(`dv${i + 1}`).setAttribute("fill", "white");
             document.getElementById(`sw${i}`).style.color = "red";
-            document.getElementById(`sw${i}`).innerHTML = "Неактивен";
+            document.getElementById(`sw${i}`).innerHTML = "Inactive";
             document.getElementById(`v${i + 1}`).innerHTML = "";
             document.getElementById(`v${i + 1}-adc`).innerHTML = "";
         });
