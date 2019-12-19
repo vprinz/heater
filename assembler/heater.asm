@@ -8,7 +8,7 @@ H       DW  12 DUP(?)   ; 12 значений влажности
 T       DB  0           ; Значение температуры
 US300   DW  0
 C       DW  0           ; Счетчик для опроса датчиков
-Mode    DW  100h        ; Текущий режим (ТЭН не работает)
+Mode    DW  0           ; Текущий режим (ТЭН не работает)
 
 ;===============================================
 
@@ -38,7 +38,7 @@ checkForLaunch MACRO firstIndex, secondIndex, thirdIndex, label
     MOV AX, H[firstIndex]
     ADD AX, H[secondIndex]
     ADD AX, H[thirdIndex]
-    CMP AX, 31B0h ; 80% влажности
+    CMP AX, 2FAEh ; 80% влажности
     JAE turnOnHeater ; включаем обогреватель, как только влажность в N-ой группе датчиков >= 80%
 ENDM
 ;===============================================
@@ -138,7 +138,7 @@ skipSensorGroup4:
     
 turnOnHeater:
     MOV T, 1
-    MOV AX, 2Dh ; Подали напряжение и включили (66 вольт)
+    MOV AX, D3h ; Подали напряжение и включили (66 вольт)
 
 toOut:
     MOV US300, AX
@@ -157,6 +157,8 @@ toOut:
     MOV C, 0
 
 CNZ:
+    CALL Delay2s
+    
     MOV AH, 4Ch
     INT 21h
 
@@ -173,6 +175,21 @@ getHumidity:
     OUT DX, AX
     
     RET
+
+Delay2s:
+    MOV BX, 0DCh
+L1: MOV CX, 25BFh
+L2: NOP
+    NOP
+    NOP
+    NOP
+    NOP
+    LOOP L2
+    DEC BX
+    JNZ L1
+    RET
+
+END
 ;===============================================
 
 END
