@@ -69,16 +69,13 @@
     width: 33%;
 }
 
-.turn-on {
+.activation {
     background: #ED1C24;
+}
+
+.transaction {
     transition: 4s;
 }
-
-.turn-off:not(:hover) {
-    background: white;
-    transition: 2s;
-}
-
 
 #svg {
     width: 100%;

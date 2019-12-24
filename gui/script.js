@@ -50,10 +50,22 @@ class DAC {
 
     constructor() {
         this.heater = new Heater();
+        this.input = null;
+        this.output = null;
     }
 
-    set(digital) {
-        this.heater.set(digital);
+    set(time, activation) {
+        if (activation) {
+            this.output = this.heater.turnOn(time);
+        } else {
+            this.output = this.heater.turnOff(time);
+        }
+        this.transform();
+        this.heater.set(this.input);
+    }
+
+    transform() {
+        this.input = Math.round((this.output / (DAC.voltage[1] - DAC.voltage[0])) * 2 ** DAC.bits);
     }
 }
 
@@ -91,25 +103,45 @@ class Switch {
 
 class Heater {
     constructor() {
-        this.mode = 0;
+        this.mode = 0; // не работает
+        // this.mode = 1; // работает
     }
 
     set(volts) {
+        // console.log('VOLTS', volts);
         switch (volts) {
             case 0xD3:
                 this.mode = 1;
                 break;
             case 0:
                 this.mode = 0;
+                break;
         }
+    }
+
+    turnOn(time) {
+        // this.mode = 2;
+        let k = 11 / 3;
+        let volts = k * time;
+        return Math.round(volts);
+    }
+
+    turnOff(time) {
+        // this.mode = 3;
+        let k = 11 / 2;
+        let volts = k * time;
+        return Math.round(volts);
     }
 }
 
 class UVM {
     constructor() {
+        this.timeForTurnOnHeater = 0;
+        this.timeForTurnOffHeater = 12;
+        this.himiditySumStates = [true, true, true, true];
         this.time = 0;
         this.count = 0;
-        this.temperature = 0;
+        this.temperature_mode = 0;
         this.currentHumiditiesSum = 0;
         this.sensorGroups = {
             'firstGroup': [0b0000, 0b0001, 0b0010],
@@ -163,8 +195,7 @@ class UVM {
             this.getHumidity(fourthGroup);
         }
 
-        this.temperature = this.temperatureSensor.get();
-        console.log(this.temperature);
+        this.temperature_mode = this.temperatureSensor.get();
         this.currentHumiditiesSum = [
             this.calculateHumidity(firstGroup),
             this.calculateHumidity(secondGroup),
@@ -172,10 +203,25 @@ class UVM {
             this.calculateHumidity(fourthGroup),
         ];
 
+        let heaterMode = this.dac.heater.mode;
         for (let i = 0; i < this.currentHumiditiesSum.length; i++) {
-            if (this.currentHumiditiesSum[i] >= 0x2FAE) {
-                this.temperature = 1;
-                this.dac.set(0xD3);
+            this.himiditySumStates[i] = this.currentHumiditiesSum[i] < 0x2FAE;
+        }
+
+        let isMoreHumidity = this.himiditySumStates.includes(false);
+        if (isMoreHumidity) {
+            this.temperature_mode = 1;
+            if (this.timeForTurnOnHeater <= 18) {
+                this.dac.set(this.timeForTurnOnHeater, true);
+            }
+            this.timeForTurnOnHeater += 2;
+        } else {
+            this.temperature_mode = 0;
+            if (heaterMode === 1) {
+                if (this.timeForTurnOffHeater >= 0) {
+                    this.dac.set(this.timeForTurnOffHeater, false);
+                }
+                this.timeForTurnOffHeater -= 2;
             }
         }
 
@@ -190,15 +236,29 @@ class UVM {
 
 const hex = (num) => "0x" + num.toString(16).toUpperCase();
 const uvm = new UVM();
+const heater = document.getElementById("heater");
 const step = () => {
     uvm.step();
     document.getElementById("time").innerHTML = uvm.time;
-    if (uvm.temperature === 0) {
-        document.getElementById("t").setAttribute("fill", "white");
-        document.getElementById("dac-in").innerHTML = hex('0');
-        document.getElementById("dac-out").innerHTML ='0';
-        const heater = document.getElementById("heater");
-        heater.classList.remove('turn-on');
+
+    if (uvm.temperature_mode === 0) {
+
+        if (uvm.dac.heater.mode === 0) {
+            document.getElementById("dac-in").innerHTML = hex('0');
+            document.getElementById("dac-out").innerHTML = '0';
+        } else {
+            document.getElementById("dac-in").innerHTML = hex(uvm.dac.input);
+            document.getElementById("dac-out").innerHTML = uvm.dac.output;
+        }
+
+        document.querySelector("input[name=dt]").checked = 0;
+        document.getElementById(`dt`).innerHTML = "Температура в норме (0)";
+        document.getElementById(`dt`).style.color = "green";
+
+        heater.style.transition = '6s';
+        heater.classList.remove('activation');
+
+        // Опрос Датчиков Влажности
         uvm.activeSensors.forEach((el, i) => {
             if (el) {
                 document.getElementById(`dv${i + 1}`).setAttribute("fill", "palegreen");
@@ -214,19 +274,17 @@ const step = () => {
                 document.getElementById(`v${i + 1}-adc`).innerHTML = "";
             }
         });
+
     } else {
-        document.getElementById("t").setAttribute("fill", "palegreen");
-        document.getElementById("dac-in").innerHTML = hex('D3');
-        document.getElementById("dac-out").innerHTML ='66';
-        const heater = document.getElementById("heater");
-        heater.classList.add('turn-on');
-        uvm.activeSensors.forEach((el, i) => {
-            document.getElementById(`dv${i + 1}`).setAttribute("fill", "white");
-            document.getElementById(`sw${i}`).style.color = "red";
-            document.getElementById(`sw${i}`).innerHTML = "Inactive";
-            document.getElementById(`v${i + 1}`).innerHTML = "";
-            document.getElementById(`v${i + 1}-adc`).innerHTML = "";
-        });
+        document.querySelector("input[name=dt]").checked = 1;
+        document.getElementById(`dt`).innerHTML = "Температура не в норме (1)";
+        document.getElementById(`dt`).style.color = "red";
+
+        heater.style.transition = '9s';
+        heater.classList.add('activation');
+
+        document.getElementById("dac-in").innerHTML = hex(uvm.dac.input);
+        document.getElementById("dac-out").innerHTML = uvm.dac.output;
     }
 };
 
@@ -234,7 +292,7 @@ document.getElementById("step").addEventListener('click', step);
 
 let interval;
 document.getElementById("start").addEventListener('click', (e) => {
-    interval = setInterval(step, 500);
+    interval = setInterval(step, 1000);
     document.getElementById("stop").disabled = false;
     document.getElementById("start").disabled = true;
     document.getElementById("step").disabled = true;
