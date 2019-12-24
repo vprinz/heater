@@ -108,7 +108,6 @@ class Heater {
     }
 
     set(volts) {
-        // console.log('VOLTS', volts);
         switch (volts) {
             case 0xD3:
                 this.mode = 1;
@@ -211,12 +210,14 @@ class UVM {
         let isMoreHumidity = this.himiditySumStates.includes(false);
         if (isMoreHumidity) {
             this.temperature_mode = 1;
+            this.timeForTurnOffHeater = 12;
             if (this.timeForTurnOnHeater <= 18) {
                 this.dac.set(this.timeForTurnOnHeater, true);
             }
             this.timeForTurnOnHeater += 2;
         } else {
             this.temperature_mode = 0;
+            this.timeForTurnOnHeater = 0;
             if (heaterMode === 1) {
                 if (this.timeForTurnOffHeater >= 0) {
                     this.dac.set(this.timeForTurnOffHeater, false);
@@ -255,7 +256,7 @@ const step = () => {
         document.getElementById(`dt`).innerHTML = "Температура в норме (0)";
         document.getElementById(`dt`).style.color = "green";
 
-        heater.style.transition = '6s';
+        heater.style.transition = '1s';
         heater.classList.remove('activation');
 
         // Опрос Датчиков Влажности
@@ -280,7 +281,7 @@ const step = () => {
         document.getElementById(`dt`).innerHTML = "Температура не в норме (1)";
         document.getElementById(`dt`).style.color = "red";
 
-        heater.style.transition = '9s';
+        heater.style.transition = '3s';
         heater.classList.add('activation');
 
         document.getElementById("dac-in").innerHTML = hex(uvm.dac.input);
@@ -292,7 +293,7 @@ document.getElementById("step").addEventListener('click', step);
 
 let interval;
 document.getElementById("start").addEventListener('click', (e) => {
-    interval = setInterval(step, 1000);
+    interval = setInterval(step, 500);
     document.getElementById("stop").disabled = false;
     document.getElementById("start").disabled = true;
     document.getElementById("step").disabled = true;
