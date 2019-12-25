@@ -25,7 +25,7 @@
 
 ### Функциональная схема
 
-<img src="https://i.gyazo.com/186ff05b3a93c30c754698621b114fb5.png" width="40%">
+<img src="https://i.gyazo.com/18fd13683dd83e6ea648659566509e89.png" width="60%">
 
 ### GUI работы ТЭН
 
