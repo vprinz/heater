@@ -23,6 +23,10 @@
 
 <img src="https://i.gyazo.com/ba3004fd8f0d5829274e01a81f031bf5.png" width="40%">
 
+### Функциональная схема
+
+<img src="https://i.gyazo.com/186ff05b3a93c30c754698621b114fb5.png" width="40%">
+
 ### GUI работы ТЭН
 
 [![Image from Gyazo](https://i.gyazo.com/a31fe2615ba8b175e6267e1237406bfa.gif)](https://gyazo.com/a31fe2615ba8b175e6267e1237406bfa)
