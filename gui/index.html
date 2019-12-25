@@ -13,26 +13,7 @@
 </nav>
 <div class="container-fluid">
     <div class="row">
-        <div class="heater-control col-md-2">
-            <button type="button" id="start" class="btn btn-success">Запуск</button>
-            <button type="button" id="step" class="btn btn-primary">Шаг</button>
-            <button type="button" id="stop" class="btn btn-secondary" disabled>Стоп</button>
-            <div class="jumbotron jumbotron-fluid" style="margin-top: 30px;">
-                <div class="container">
-                    <h1 class="display-5">Общее</h1>
-                    <p class="lead">Время: <span id="time">0</span> с</p>
-                    <!--<p class="lead">Режим работы: <span id="mode">0</span></p>-->
-                </div>
-            </div>
-            <div class="jumbotron jumbotron-fluid" style="margin-top: 30px;">
-                <div class="container">
-                    <h1 class="display-5">ЦАП</h1>
-                    <p class="lead">Вход: <span id="dac-in">0x0</span></p>
-                    <p class="lead">Выход: <span id="dac-out">0</span> В</p>
-                </div>
-            </div>
-        </div>
-        <div class="heater-display col-md-10">
+        <div class="heater-display col-md-12">
             <div class="row">
                 <div class="heater col-md-6">
                     <svg id="svg">
@@ -74,69 +55,93 @@
                         <div class="col-md-6">
                             <p>
                                 ДВ1:
-                                <input class="dv-input input input-symbols" type="text" readonly id="dv1-text" value="10">
-                                <input class="slider" type="range" data-id="1" min="10" max="100" step="1" id="dv1-slider">
+                                <input class="dv-input input input-symbols" type="text" readonly id="dv1-text"
+                                       value="10">
+                                <input class="slider" type="range" data-id="1" min="10" max="100" step="1"
+                                       id="dv1-slider">
                             </p>
                             <p>
                                 ДВ3:
-                                <input class="dv-input input input-symbols" type="text" readonly id="dv3-text" value="10">
-                                <input class="slider" type="range" data-id="3" min="10" max="100" step="1" id="dv3-slider">
+                                <input class="dv-input input input-symbols" type="text" readonly id="dv3-text"
+                                       value="10">
+                                <input class="slider" type="range" data-id="3" min="10" max="100" step="1"
+                                       id="dv3-slider">
                             </p>
                             <p>
                                 ДВ5:
-                                <input class="dv-input input input-symbols" type="text" readonly id="dv5-text" value="10">
-                                <input class="slider" type="range" data-id="5" min="10" max="100" step="1" id="dv5-slider">
+                                <input class="dv-input input input-symbols" type="text" readonly id="dv5-text"
+                                       value="10">
+                                <input class="slider" type="range" data-id="5" min="10" max="100" step="1"
+                                       id="dv5-slider">
                             </p>
                         </div>
                         <div class="col-md-6">
                             <p>
                                 ДВ7:
-                                <input class="dv-input input input-symbols" type="text" readonly id="dv7-text" value="10">
-                                <input class="slider" type="range" data-id="7" min="10" max="100" step="1" id="dv7-slider">
+                                <input class="dv-input input input-symbols" type="text" readonly id="dv7-text"
+                                       value="10">
+                                <input class="slider" type="range" data-id="7" min="10" max="100" step="1"
+                                       id="dv7-slider">
                             </p>
                             <p>
                                 ДВ9:
-                                <input class="dv-input input input-symbols" type="text" readonly id="dv9-text" value="10">
-                                <input class="slider" type="range" data-id="9" min="10" max="100" step="1" id="dv9-slider">
+                                <input class="dv-input input input-symbols" type="text" readonly id="dv9-text"
+                                       value="10">
+                                <input class="slider" type="range" data-id="9" min="10" max="100" step="1"
+                                       id="dv9-slider">
                             </p>
                             <p>
                                 ДВ11:
-                                <input class="dv-input input input-symbols" type="text" readonly id="dv11-text" value="10">
-                                <input class="slider" type="range" data-id="11" min="10" max="100" step="1" id="dv11-slider">
+                                <input class="dv-input input input-symbols" type="text" readonly id="dv11-text"
+                                       value="10">
+                                <input class="slider" type="range" data-id="11" min="10" max="100" step="1"
+                                       id="dv11-slider">
                             </p>
                         </div>
                         <div class="col-md-6" style="padding-top: 30px;">
                             <p>
                                 ДВ2:
-                                <input class="dv-input input input-symbols" type="text" readonly id="dv2-text" value="10">
-                                <input class="slider" type="range" data-id="2" min="10" max="100" step="1" id="dv2-slider">
+                                <input class="dv-input input input-symbols" type="text" readonly id="dv2-text"
+                                       value="10">
+                                <input class="slider" type="range" data-id="2" min="10" max="100" step="1"
+                                       id="dv2-slider">
                             </p>
                             <p>
                                 ДВ4:
-                                <input class="dv-input input input-symbols" type="text" readonly id="dv4-text" value="10">
-                                <input class="slider" type="range" data-id="4" min="10" max="100" step="1" id="dv4-slider">
+                                <input class="dv-input input input-symbols" type="text" readonly id="dv4-text"
+                                       value="10">
+                                <input class="slider" type="range" data-id="4" min="10" max="100" step="1"
+                                       id="dv4-slider">
                             </p>
                             <p>
                                 ДВ6:
-                                <input class="dv-input input input-symbols" type="text" readonly id="dv6-text" value="10">
-                                <input class="slider" type="range" data-id="6" min="10" max="100" step="1" id="dv6-slider">
+                                <input class="dv-input input input-symbols" type="text" readonly id="dv6-text"
+                                       value="10">
+                                <input class="slider" type="range" data-id="6" min="10" max="100" step="1"
+                                       id="dv6-slider">
                             </p>
                         </div>
                         <div class="col-md-6" style="padding-top: 30px;">
                             <p>
                                 ДВ8:
-                                <input class="dv-input input input-symbols" type="text" readonly id="dv8-text" value="10">
-                                <input class="slider" type="range" data-id="8" min="10" max="100" step="1" id="dv8-slider">
+                                <input class="dv-input input input-symbols" type="text" readonly id="dv8-text"
+                                       value="10">
+                                <input class="slider" type="range" data-id="8" min="10" max="100" step="1"
+                                       id="dv8-slider">
                             </p>
                             <p>
                                 ДВ10:
-                                <input class="dv-input input input-symbols" type="text" readonly id="dv10-text" value="10">
-                                <input class="slider" type="range" data-id="10" min="10" max="100" step="1" id="dv10-slider">
+                                <input class="dv-input input input-symbols" type="text" readonly id="dv10-text"
+                                       value="10">
+                                <input class="slider" type="range" data-id="10" min="10" max="100" step="1"
+                                       id="dv10-slider">
                             </p>
                             <p>
                                 ДВ12:
-                                <input class="dv-input input input-symbols" type="text" readonly id="dv12-text" value="10">
-                                <input class="slider" type="range" data-id="12" min="10" max="100" step="1" id="dv12-slider">
+                                <input class="dv-input input input-symbols" type="text" readonly id="dv12-text"
+                                       value="10">
+                                <input class="slider" type="range" data-id="12" min="10" max="100" step="1"
+                                       id="dv12-slider">
                             </p>
                         </div>
                         <div class="col-md-6" style="padding-top: 30px;">
@@ -155,90 +160,122 @@
         </div>
         <div class="calculated-values col-md-12">
             <div class="row">
-                <div class="col-md-4">
-                    <div class="jumbotron jumbotron-fluid">
-                        <div class="container">
-                            <h1 class="display-5">Датчики</h1>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <p>ДВ1: <span id="v1"></span></p>
-                                    <p>ДВ3: <span id="v2"></span></p>
-                                    <p>ДВ5: <span id="v3"></span></p>
-                                </div>
-                                <div class="col-md-3">
-                                    <p>ДВ7: <span id="v4"></span></p>
-                                    <p>ДВ9: <span id="v5"></span></p>
-                                    <p>ДВ11: <span id="v6"></span></p>
-                                </div>
-                                <div class="col-md-3">
-                                    <p>ДВ2: <span id="v7"></span></p>
-                                    <p>ДВ4: <span id="v8"></span></p>
-                                    <p>ДВ6: <span id="v9"></span></p>
-                                </div>
-                                <div class="col-md-3">
-                                    <p>ДВ8: <span id="v10"></span></p>
-                                    <p>ДВ10: <span id="v11"></span></p>
-                                    <p>ДВ12: <span id="v12"></span></p>
-                                </div>
-                            </div>
+                <div class="col-md-2">
+                    <button type="button" id="start" class="col-md-12 btn btn-success" style="margin-bottom: 10px;">Запуск</button>
+                    <button type="button" id="step" class="col-md-12 btn btn-primary" style="margin-bottom: 10px;">Шаг</button>
+                    <button type="button" id="stop" class="col-md-12 btn btn-secondary" disabled>Стоп</button>
+                </div>
+                <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="lead">
+                                Общее
+                            </p>
+                        </div>
+                        <div class="col-md-12">
+                            <p class="lead">Время: <span id="time">0</span> с</p>
+                            <p class="lead">Режим работы: <span id="mode">0</span></p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="jumbotron jumbotron-fluid" style="height: 305px;">
-                        <div class="container">
-                            <h1 class="display-5">Коммутатор</h1>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <p>0b0000: <span id="sw0" style="color: red;">Inactive</span></p>
-                                    <p>0b0001: <span id="sw1" style="color: red;">Inactive</span></p>
-                                    <p>0b0010: <span id="sw2" style="color: red;">Inactive</span></p>
-                                </div>
-                                <div class="col-md-3">
-                                    <p>0b0011: <span id="sw3" style="color: red;">Inactive</span></p>
-                                    <p>0b0100: <span id="sw4" style="color: red;">Inactive</span></p>
-                                    <p>0b0101: <span id="sw5" style="color: red;">Inactive</span></p>
-                                </div>
-                                <div class="col-md-3">
-                                    <p>0b0110: <span id="sw6" style="color: red;">Inactive</span></p>
-                                    <p>0b0111: <span id="sw7" style="color: red;">Inactive</span></p>
-                                    <p>0b1000: <span id="sw8" style="color: red;">Inactive</span></p>
-                                </div>
-                                <div class="col-md-3">
-                                    <p>0b1001: <span id="sw9" style="color: red;">Inactive</span></p>
-                                    <p>0b1010: <span id="sw10" style="color: red;">Inactive</span></p>
-                                    <p>0b1011: <span id="sw11" style="color: red;">Inactive</span></p>
-                                </div>
-                            </div>
+                <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="lead">Датчики</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>ДВ1: <span id="v1">10%</span></p>
+                            <p>ДВ3: <span id="v2">10%</span></p>
+                            <p>ДВ5: <span id="v3">10%</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>ДВ7: <span id="v4">10%</span></p>
+                            <p>ДВ9: <span id="v5">10%</span></p>
+                            <p>ДВ11: <span id="v6">10%</span></p>
+                        </div>
+                        <div class="col-md-12">
+                            <hr class="my-4">
+                        </div>
+                        <div class="col-md-6">
+                            <p>ДВ2: <span id="v7">10%</span></p>
+                            <p>ДВ4: <span id="v8">10%</span></p>
+                            <p>ДВ6: <span id="v9">10%</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>ДВ8: <span id="v10">10%</span></p>
+                            <p>ДВ10: <span id="v11">10%</span></p>
+                            <p>ДВ12: <span id="v12">10%</span></p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-5">
-                    <div class="jumbotron jumbotron-fluid">
-                        <div class="container">
-                            <h1 class="display-5">АЦП</h1>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <p>ДВ1: <span id="v1-adc"></span></p>
-                                    <p>ДВ3: <span id="v2-adc"></span></p>
-                                    <p>ДВ5: <span id="v3-adc"></span></p>
-                                </div>
-                                <div class="col-md-3">
-                                    <p>ДВ7: <span id="v4-adc"></span></p>
-                                    <p>ДВ9: <span id="v5-adc"></span></p>
-                                    <p>ДВ11: <span id="v6-adc"></span></p>
-                                </div>
-                                <div class="col-md-3">
-                                    <p>ДВ2: <span id="v7-adc"></span></p>
-                                    <p>ДВ4: <span id="v8-adc"></span></p>
-                                    <p>ДВ6: <span id="v9-adc"></span></p>
-                                </div>
-                                <div class="col-md-3">
-                                    <p>ДВ8: <span id="v10-adc"></span></p>
-                                    <p>ДВ10: <span id="v11-adc"></span></p>
-                                    <p>ДВ12: <span id="v12-adc"></span></p>
-                                </div>
-                            </div>
+                <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="lead">Коммутатор</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>0b0000: <span id="sw0" style="color: red;">Inactive</span></p>
+                            <p>0b0001: <span id="sw1" style="color: red;">Inactive</span></p>
+                            <p>0b0010: <span id="sw2" style="color: red;">Inactive</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>0b0011: <span id="sw3" style="color: red;">Inactive</span></p>
+                            <p>0b0100: <span id="sw4" style="color: red;">Inactive</span></p>
+                            <p>0b0101: <span id="sw5" style="color: red;">Inactive</span></p>
+                        </div>
+                        <div class="col-md-12">
+                            <hr class="my-4">
+                        </div>
+                        <div class="col-md-6">
+                            <p>0b0110: <span id="sw6" style="color: red;">Inactive</span></p>
+                            <p>0b0111: <span id="sw7" style="color: red;">Inactive</span></p>
+                            <p>0b1000: <span id="sw8" style="color: red;">Inactive</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>0b1001: <span id="sw9" style="color: red;">Inactive</span></p>
+                            <p>0b1010: <span id="sw10" style="color: red;">Inactive</span></p>
+                            <p>0b1011: <span id="sw11" style="color: red;">Inactive</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="lead">АЦП</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>ДВ1: <span id="v1-adc"></span></p>
+                            <p>ДВ3: <span id="v2-adc"></span></p>
+                            <p>ДВ5: <span id="v3-adc"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>ДВ7: <span id="v4-adc"></span></p>
+                            <p>ДВ9: <span id="v5-adc"></span></p>
+                            <p>ДВ11: <span id="v6-adc"></span></p>
+                        </div>
+                        <div class="col-md-12">
+                            <hr class="my-4">
+                        </div>
+                        <div class="col-md-6">
+                            <p>ДВ2: <span id="v7-adc"></span></p>
+                            <p>ДВ4: <span id="v8-adc"></span></p>
+                            <p>ДВ6: <span id="v9-adc"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>ДВ8: <span id="v10-adc"></span></p>
+                            <p>ДВ10: <span id="v11-adc"></span></p>
+                            <p>ДВ12: <span id="v12-adc"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="lead">ЦАП</p>
+                        </div>
+                        <div class="col-md-12">
+                            <p class="lead">Вход: <span id="dac-in">0x0</span></p>
+                            <p class="lead">Выход: <span id="dac-out">0</span> В</p>
                         </div>
                     </div>
                 </div>
