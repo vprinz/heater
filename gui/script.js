@@ -1,7 +1,7 @@
 const heaterNotWork = 0;
 const heaterWork = 1;
 const timeForActivateHeater = 18;
-const timeForDisactivateHeater = 12;
+const timeForDeactivateHeater = 12;
 const humidityLimit = 0x2FAE; // 80%
 const voltsForActivateHeater = 0xD3; // 66 вольт
 
@@ -144,7 +144,7 @@ class UVM {
         this.time = 0;
         this.count = 0;
         this.timeForTurnOnHeater = 0;
-        this.timeForTurnOffHeater = timeForDisactivateHeater;
+        this.timeForTurnOffHeater = timeForDeactivateHeater;
         this.humiditySumStates = [true, true, true, true];
         this.temperature_mode = 0;
         this.currentHumiditiesSum = 0;
@@ -219,7 +219,7 @@ class UVM {
         let isMoreHumidity = this.checkHumiditySumStates().includes(false);
         if (isMoreHumidity) {
             this.temperature_mode = 1;
-            this.timeForTurnOffHeater = timeForDisactivateHeater;
+            this.timeForTurnOffHeater = timeForDeactivateHeater;
             if (this.timeForTurnOnHeater <= timeForActivateHeater) {
                 this.dac.set(this.timeForTurnOnHeater, true);
             }
