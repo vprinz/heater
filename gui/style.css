@@ -5,20 +5,11 @@
     background-color: aliceblue;
 }
 
-.heater-control .btn {
-    width: 85%;
-    margin: 5px 0;
-}
-
 .calculated-values {
     /*height: 1300px;*/
     padding-top: 30px;
     text-align: center;
     background-color: aliceblue;
-}
-
-.heater-display {
-    /*height: 1300px;*/
 }
 
 .input {
@@ -42,12 +33,11 @@
 }
 
 .heater-box {
-    width: 70%;
+    width: 50%;
     height: 130px;
     border: 4px solid #000;
     margin-bottom: 10px;
     position: relative;
-    left: 15%;
     bottom: 55%;
 }
 
@@ -69,16 +59,13 @@
     width: 33%;
 }
 
-.turn-on {
+.activation {
     background: #ED1C24;
+}
+
+.transaction {
     transition: 4s;
 }
-
-.turn-off:not(:hover) {
-    background: white;
-    transition: 2s;
-}
-
 
 #svg {
     width: 100%;

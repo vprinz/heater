@@ -1,3 +1,10 @@
+const heaterNotWork = 0;
+const heaterWork = 1;
+const timeForActivateHeater = 18;
+const timeForDeactivateHeater = 12;
+const humidityLimit = 0x2FAE; // 80%
+const voltsForActivateHeater = 0xD3; // 66 вольт
+
 class HSensor {
     static humidity = [10, 100];
     static voltage = [0.45, 9.2];
@@ -20,7 +27,8 @@ class TSensor {
 
 class ADC {
     /*
-        Analog-to-digital converter
+        Analog-to-digital converter (eng)
+        АЦП (рус)
      */
     static bits = 14;
     static voltage = [0, 10];
@@ -43,17 +51,30 @@ class ADC {
 
 class DAC {
     /*
-        Digital-to-analog converter
+        Digital-to-analog converter (eng)
+        ЦАП (рус)
      */
     static bits = 8;
     static voltage = [0, 80];
 
     constructor() {
         this.heater = new Heater();
+        this.input = null;
+        this.output = null;
     }
 
-    set(digital) {
-        this.heater.set(digital);
+    set(time, activation) {
+        if (activation) {
+            this.output = this.heater.turnOn(time);
+        } else {
+            this.output = this.heater.turnOff(time);
+        }
+        this.transform();
+        this.heater.set(this.input);
+    }
+
+    transform() {
+        this.input = Math.round((this.output / (DAC.voltage[1] - DAC.voltage[0])) * 2 ** DAC.bits);
     }
 }
 
@@ -77,7 +98,7 @@ class Switch {
     ];
 
     constructor() {
-        this.port = null; // мб нужно будет убрать null
+        this.port = null;
     }
 
     set(port) {
@@ -91,17 +112,30 @@ class Switch {
 
 class Heater {
     constructor() {
-        this.mode = 0;
+        this.mode = heaterNotWork;
     }
 
     set(volts) {
         switch (volts) {
-            case 0xD3:
-                this.mode = 1;
+            case voltsForActivateHeater:
+                this.mode = heaterWork;
                 break;
             case 0:
-                this.mode = 0;
+                this.mode = heaterNotWork;
+                break;
         }
+    }
+
+    turnOn(time) {
+        let k = 11 / 3;
+        let volts = k * time;
+        return Math.round(volts);
+    }
+
+    turnOff(time) {
+        let k = 11 / 2;
+        let volts = k * time;
+        return Math.round(volts);
     }
 }
 
@@ -109,7 +143,10 @@ class UVM {
     constructor() {
         this.time = 0;
         this.count = 0;
-        this.temperature = 0;
+        this.timeForTurnOnHeater = 0;
+        this.timeForTurnOffHeater = timeForDeactivateHeater;
+        this.humiditySumStates = [true, true, true, true];
+        this.temperature_mode = 0;
         this.currentHumiditiesSum = 0;
         this.sensorGroups = {
             'firstGroup': [0b0000, 0b0001, 0b0010],
@@ -144,6 +181,13 @@ class UVM {
         return sum;
     }
 
+    checkHumiditySumStates() {
+        for (let i = 0; i < this.currentHumiditiesSum.length; i++) {
+            this.humiditySumStates[i] = this.currentHumiditiesSum[i] < humidityLimit;
+        }
+        return this.humiditySumStates;
+    }
+
     step() {
         this.activeSensors = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
@@ -163,8 +207,7 @@ class UVM {
             this.getHumidity(fourthGroup);
         }
 
-        this.temperature = this.temperatureSensor.get();
-        console.log(this.temperature);
+        this.temperature_mode = this.temperatureSensor.get();
         this.currentHumiditiesSum = [
             this.calculateHumidity(firstGroup),
             this.calculateHumidity(secondGroup),
@@ -172,10 +215,23 @@ class UVM {
             this.calculateHumidity(fourthGroup),
         ];
 
-        for (let i = 0; i < this.currentHumiditiesSum.length; i++) {
-            if (this.currentHumiditiesSum[i] >= 0x2FAE) {
-                this.temperature = 1;
-                this.dac.set(0xD3);
+        let heaterMode = this.dac.heater.mode;
+        let isMoreHumidity = this.checkHumiditySumStates().includes(false);
+        if (isMoreHumidity) {
+            this.temperature_mode = 1;
+            this.timeForTurnOffHeater = timeForDeactivateHeater;
+            if (this.timeForTurnOnHeater <= timeForActivateHeater) {
+                this.dac.set(this.timeForTurnOnHeater, true);
+            }
+            this.timeForTurnOnHeater += 2;
+        } else {
+            this.temperature_mode = 0;
+            this.timeForTurnOnHeater = 0;
+            if (heaterMode === 1) {
+                if (this.timeForTurnOffHeater >= 0) {
+                    this.dac.set(this.timeForTurnOffHeater, false);
+                }
+                this.timeForTurnOffHeater -= 2;
             }
         }
 
@@ -190,43 +246,57 @@ class UVM {
 
 const hex = (num) => "0x" + num.toString(16).toUpperCase();
 const uvm = new UVM();
+const heater = document.getElementById("heater");
 const step = () => {
     uvm.step();
     document.getElementById("time").innerHTML = uvm.time;
-    if (uvm.temperature === 0) {
-        document.getElementById("t").setAttribute("fill", "white");
-        document.getElementById("dac-in").innerHTML = hex('0');
-        document.getElementById("dac-out").innerHTML ='0';
-        const heater = document.getElementById("heater");
-        heater.classList.remove('turn-on');
+
+    if (uvm.temperature_mode === 0) {
+
+        if (uvm.dac.heater.mode === 0) {
+            document.getElementById("dac-in").innerHTML = hex('0');
+            document.getElementById("dac-out").innerHTML = '0';
+        } else {
+            document.getElementById("dac-in").innerHTML = hex(uvm.dac.input);
+            document.getElementById("dac-out").innerHTML = uvm.dac.output;
+        }
+
+        document.getElementById("mode").innerHTML = uvm.dac.heater.mode;
+
+        document.querySelector("input[name=dt]").checked = 0;
+        document.getElementById(`dt`).innerHTML = "Температура в норме (0)";
+        document.getElementById(`dt`).style.color = "green";
+
+        heater.style.transition = '1s';
+        heater.classList.remove('activation');
+
+        // Опрос Датчиков Влажности
         uvm.activeSensors.forEach((el, i) => {
             if (el) {
                 document.getElementById(`dv${i + 1}`).setAttribute("fill", "palegreen");
                 document.getElementById(`sw${i}`).style.color = "green";
                 document.getElementById(`sw${i}`).innerHTML = "Active";
-                document.getElementById(`v${i + 1}`).innerHTML = `${uvm.saveHumidities[i]} %`;
+                document.getElementById(`v${i + 1}`).innerHTML = `${uvm.saveHumidities[i]}%`;
                 document.getElementById(`v${i + 1}-adc`).innerHTML = hex(uvm.humidities[i]);
             } else {
                 document.getElementById(`dv${i + 1}`).setAttribute("fill", "white");
                 document.getElementById(`sw${i}`).style.color = "red";
                 document.getElementById(`sw${i}`).innerHTML = "Inactive";
-                document.getElementById(`v${i + 1}`).innerHTML = "";
                 document.getElementById(`v${i + 1}-adc`).innerHTML = "";
             }
         });
+
     } else {
-        document.getElementById("t").setAttribute("fill", "palegreen");
-        document.getElementById("dac-in").innerHTML = hex('D3');
-        document.getElementById("dac-out").innerHTML ='66';
-        const heater = document.getElementById("heater");
-        heater.classList.add('turn-on');
-        uvm.activeSensors.forEach((el, i) => {
-            document.getElementById(`dv${i + 1}`).setAttribute("fill", "white");
-            document.getElementById(`sw${i}`).style.color = "red";
-            document.getElementById(`sw${i}`).innerHTML = "Inactive";
-            document.getElementById(`v${i + 1}`).innerHTML = "";
-            document.getElementById(`v${i + 1}-adc`).innerHTML = "";
-        });
+        document.querySelector("input[name=dt]").checked = 1;
+        document.getElementById(`dt`).innerHTML = "Температура не в норме (1)";
+        document.getElementById(`dt`).style.color = "red";
+
+        heater.style.transition = '3s';
+        heater.classList.add('activation');
+
+        document.getElementById("dac-in").innerHTML = hex(uvm.dac.input);
+        document.getElementById("dac-out").innerHTML = uvm.dac.output;
+        document.getElementById("mode").innerHTML = uvm.dac.heater.mode;
     }
 };
 
