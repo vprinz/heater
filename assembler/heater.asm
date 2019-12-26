@@ -177,20 +177,17 @@ getHumidity:
     RET
 
 Delay2s:
-    MOV BX, 0DCh
-L1: MOV CX, 25BFh
-L2: NOP
+    MOV BX, 898 
+L1: MOV CX, 17976
+L2: NOP 
+    NOP 
+    NOP 
     NOP
-    NOP
-    NOP
-    NOP
+    NOP 
     LOOP L2
-    DEC BX
-    JNZ L1
+    DEC BX 
+    JNZ L1 
     RET
-
-END
 ;===============================================
 
 END
-;===============================================
